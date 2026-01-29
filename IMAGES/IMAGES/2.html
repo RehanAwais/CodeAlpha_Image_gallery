@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)file:///C:/Users/user/Desktop/ImageGallery/REH.HTML -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+ <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea91 0%, #764ba2ee 100%);
+            min-height: 100vh;
+            padding: 20px;
+        } 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: rgb(255, 255, 255);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.425);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn.active {
+            background: #7848a5;
+            color: rgb(255, 255, 255);
+        }
+  .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 1;
+        }
+
+        .gallery-item.hidden {
+            display: none;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .overlay {
+            transform: translateY(0);
+        }
+
+        .overlay h3 {
+            margin-bottom: 5px;
+        }
+
+        .overlay p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(255,255,255,0.1);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: #764ba2;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-nav:hover {
+            background: #764ba2;
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+        .download-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #3b0747;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 5px;
+}
+.download-btn:hover {
+    background-color: #0a1466;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ Photo Gallery ✨</h1>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="nature">Nature</button>
+            <button class="filter-btn active" data-filter="city">City</button>
+            <button class="filter-btn" data-filter="people">People</button>
+            <button class="filter-btn" data-filter="animals">Animals</button>
+            <button class="filter-btn" data-filter="food">Food</button>
+            <button class="filter-btn" data-filter="art">Art</button>
+        </div>
+
+        <div class="gallery" id="gallery"><div class="gallery-item hidden" data-category="people">
+                    <img src="file:///C:/Users/user/Desktop/ImageGallery/IMAGES/SHORT.JPG" alt="Rehan Awais">
+                    <div class="overlay">
+                        <h3>Rehan Awais</h3>
+                        <p>People</p>
+                    </div>
+                </div><div class="gallery-item" data-category="city">
+                    <img src="./2_files/photo-1514565131-fce0801e5785" alt="City Lights">
+                    <div class="overlay">
+                        <h3>City Lights</h3>
+                        <p>City</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="animals">
+                    <img src="./2_files/photo-1560807707-8cc77767d783" alt="Puppy">
+                    <div class="overlay">
+                        <h3>Puppy</h3>
+                        <p>Animals</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="people">
+                    <img src="./2_files/photo-1511988617509-a57c8a288659" alt="Portrait">
+                    <div class="overlay">
+                        <h3>Portrait</h3>
+                        <p>People</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="nature">
+                    <img src="./2_files/photo-1470071459604-3b5ec3a7fe05" alt="Forest Path">
+                    <div class="overlay">
+                        <h3>Forest Path</h3>
+                        <p>Nature</p>
+                    </div>
+                </div><div class="gallery-item" data-category="city">
+                    <img src="./2_files/photo-1480714378408-67cf0d13bc1b" alt="Urban Street">
+                    <div class="overlay">
+                        <h3>Urban Street</h3>
+                        <p>City</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="animals">
+                    <img src="./2_files/photo-1474511320723-9a56873867b5" alt="Fox">
+                    <div class="overlay">
+                        <h3>Fox</h3>
+                        <p>Animals</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="people">
+                    <img src="./2_files/photo-1507003211169-0a1dd7228f2d" alt="Man Portrait">
+                    <div class="overlay">
+                        <h3>Man Portrait</h3>
+                        <p>People</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="nature">
+                    <img src="./2_files/photo-1441974231531-c6227db76b6e" alt="Waterfall">
+                    <div class="overlay">
+                        <h3>Waterfall</h3>
+                        <p>Nature</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="art">
+                    <img src="./2_files/photo-1561214115-f2f134cc4912" alt="Watercolor">
+                    <div class="overlay">
+                        <h3>Watercolor</h3>
+                        <p>Art</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="animals">
+                    <img src="./2_files/photo-1437622368342-7a3d73a34c8f" alt="Leopard">
+                    <div class="overlay">
+                        <h3>Leopard</h3>
+                        <p>Animals</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="food">
+                    <img src="./2_files/photo-1563379926898-05f4575a45d8" alt="Sushli">
+                    <div class="overlay">
+                        <h3>Sushli</h3>
+                        <p>Food</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="nature">
+                    <img src="./2_files/photo-1470252649378-9c29740c9fa8" alt="Forest path">
+                    <div class="overlay">
+                        <h3>Forest path</h3>
+                        <p>Nature</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="art">
+                    <img src="./2_files/photo-1515405295579-ba7b45403062" alt="Mural">
+                    <div class="overlay">
+                        <h3>Mural</h3>
+                        <p>Art</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="animals">
+                    <img src="./2_files/photo-1484406566174-9da000fda645" alt="Monkey">
+                    <div class="overlay">
+                        <h3>Monkey</h3>
+                        <p>Animals</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="people">
+                    <img src="./2_files/photo-1522075469751-3a6694fb2f61" alt="Smiling Man">
+                    <div class="overlay">
+                        <h3>Smiling Man</h3>
+                        <p>People</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="food">
+                    <img src="./2_files/photo-1546069901-ba9599a7e63c" alt="Gourmet Dish">
+                    <div class="overlay">
+                        <h3>Gourmet Dish</h3>
+                        <p>Food</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="art">
+                    <img src="./2_files/photo-1582555172866-f73bb12a2ab3" alt="Modern Art">
+                    <div class="overlay">
+                        <h3>Modern Art</h3>
+                        <p>Art</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="people">
+                    <img src="./2_files/photo-1438761681033-6461ffad8d80" alt="Woman Portrait">
+                    <div class="overlay">
+                        <h3>Woman Portrait</h3>
+                        <p>People</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="food">
+                    <img src="./2_files/photo-1570197788417-0e82375c9371" alt="Ice Cream">
+                    <div class="overlay">
+                        <h3>Ice Cream</h3>
+                        <p>Food</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="art">
+                    <img src="./2_files/photo-1578301978693-85fa9c0320b9" alt="Museum">
+                    <div class="overlay">
+                        <h3>Museum</h3>
+                        <p>Art</p>
+                    </div>
+                </div><div class="gallery-item" data-category="city">
+                    <img src="./2_files/photo-1449824913935-59a10b8d2000" alt="Skyscraper">
+                    <div class="overlay">
+                        <h3>Skyscraper</h3>
+                        <p>City</p>
+                    </div>
+                </div><div class="gallery-item hidden" data-category="food">
+                    <img src="./2_files/photo-1565299624946-b28f40a0ae38" alt="Pizza">
+                    <div class="overlay">
+                        <h3>Pizza</h3>
+                        <p>Food</p>
+                    </div>
+                </div><div class="gallery-item" data-category="city">
+                    <img src="file:///C:/Users/user/Desktop/ImageGallery/IMAGES/1.JPG" alt="London">
+                    <div class="overlay">
+                        <h3>London</h3>
+                        <p>City</p>
+                    </div>
+                </div></div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightbox-close">×</button>
+            <button class="lightbox-nav lightbox-prev" id="lightbox-prev">‹</button>
+            <button class="lightbox-nav lightbox-next" id="lightbox-next">›</button>
+            <img id="lightbox-img" src="file:///C:/Users/user/Desktop/ImageGallery/REH.HTML" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample image data
+        const images = [
+            { id: 1, src: 'IMAGES/SHORT.JPG', title: 'Rehan Awais', category: 'people' },
+            { id: 2, src: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=500', title: 'City Lights', category: 'city' },
+            { id: 3, src:  'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=500', title: 'Puppy', category: 'animals' },        
+            { id: 4, src: 'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=500', title: 'Portrait', category: 'people' },
+            { id: 5, src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500', title: 'Forest Path', category: 'nature' },
+            { id: 6, src: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=500', title: 'Urban Street', category: 'city' },
+            { id: 7, src: 'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=500', title: 'Fox', category: 'animals' },
+            { id: 8, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500', title: 'Man Portrait', category: 'people' },
+            { id: 9, src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500', title: 'Waterfall', category: 'nature' },
+            { id: 10, src: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=500', title: 'Watercolor', category: 'art' },
+            { id: 11, src: 'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=500', title: 'Leopard', category: 'animals' },
+            { id: 12, src:'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=500', title: 'Sushli', category: 'food' },
+            { id: 13, src:   'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=500', title: 'Forest path', category: 'nature' },       
+            { id: 14, src:   'https://images.unsplash.com/photo-1515405295579-ba7b45403062?w=500', title: 'Mural', category: 'art' },
+            { id: 15, src: 'https://images.unsplash.com/photo-1484406566174-9da000fda645?w=500', title: 'Monkey', category: 'animals' },       
+            { id: 16, src:  'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500', title: 'Smiling Man', category: 'people'},
+            { id: 17, src:  'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500',title: 'Gourmet Dish', category: 'food'},
+            { id: 18, src:  'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=500', title: 'Modern Art', category: 'art' },
+            { id:19, src:  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500', title: 'Woman Portrait', category: 'people' },
+            { id: 20, src:  'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=500', title: 'Ice Cream', category: 'food' },
+             { id: 21, src:  'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=500', title: 'Museum', category: 'art' },
+            { id: 22, src:   'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=500', title: 'Skyscraper', category: 'city' },
+            { id: 23, src:  'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500', title: 'Pizza', category: 'food' },        
+            { id: 24, src:  'IMAGES/1.JPG', title: 'London', category: 'city'},
+           
+        
+        
+        ];
+
+        let currentImageIndex = 0;
+        let filteredImages = [...images];
+
+        // Initialize gallery
+        function initGallery() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+            
+            images.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.dataset.category = img.category;
+                item.innerHTML = `
+                    <img src="${img.src}" alt="${img.title}">
+                    <div class="overlay">
+                        <h3>${img.title}</h3>
+                        <p>${img.category.charAt(0).toUpperCase() + img.category.slice(1)}</p>
+                    </div>
+                `;
+                item.addEventListener('click', () => openLightbox(index));
+                gallery.appendChild(item);
+            });
+        }
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                const items = document.querySelectorAll('.gallery-item');
+                
+                filteredImages = filter === 'all' 
+                    ? [...images] 
+                    : images.filter(img => img.category === filter);
+                
+                items.forEach((item, index) => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+
+        function openLightbox(index) {
+            currentImageIndex = index;
+            showLightboxImage();
+            lightbox.classList.add('active');
+        }
+
+        function showLightboxImage() {
+            const img = images[currentImageIndex];
+            lightboxImg.src = img.src;
+            lightboxCaption.textContent = img.title;
+        }
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightboxPrev.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            showLightboxImage();
+        });
+
+        lightboxNext.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            showLightboxImage();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                lightbox.classList.remove('active');
+            } else if (e.key === 'ArrowLeft') {
+                lightboxPrev.click();
+            } else if (e.key === 'ArrowRight') {
+                lightboxNext.click();
+            }
+        });
+
+        // Close lightbox on background click
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        initGallery();
+    </script>
+    <a href="file:///C:/Users/user/Desktop/ImageGallery/images/photo1.jpg" download="my-photo.jpg" class="download-btn">
+    Download Image
+</a>
+
+
+</body></html>
