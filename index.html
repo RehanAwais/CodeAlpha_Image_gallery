@@ -1,417 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Creative Glass Gallery</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-/* ===== RESET ===== */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-/* ===== BACKGROUND ===== */
-body{
-    min-height:100vh;
-    background: linear-gradient(270deg,#667eea,#764ba2,#43cea2,#185a9d);
-    background-size: 800% 800%;
-    animation: gradientMove 15s ease infinite;
-    padding:30px;
-}
-
-@keyframes gradientMove{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-
-.container{
-    max-width:1300px;
-    margin:auto;
-}
-
-h1{
-    text-align:center;
-    color:#fff;
-    font-size:3rem;
-    margin-bottom:40px;
-    letter-spacing:2px;
-    text-shadow:0 10px 30px rgba(0,0,0,.4);
-}
-
-/* ===== FILTER BUTTONS ===== */
-.filter-buttons{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-bottom:40px;
-}
-
-.filter-btn{
-    padding:10px 26px;
-    border-radius:50px;
-    border:none;
-    cursor:pointer;
-    font-size:15px;
-    background:rgba(255,255,255,.2);
-    backdrop-filter:blur(10px);
-    color:#fff;
-    transition:.4s;
-}
-
-.filter-btn:hover,
-.filter-btn.active{
-    background:#fff;
-    color:#000;
-    transform:translateY(-3px);
-}
-
-/* ===== GALLERY GRID ===== */
-.gallery{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-    gap:25px;
-    animation:fadeUp 1s ease;
-}
-
-@keyframes fadeUp{
-    from{opacity:0;transform:translateY(40px)}
-    to{opacity:1;transform:translateY(0)}
-}
-
-/* ===== CARD ===== */
-.gallery-item{
-    position:relative;
-    border-radius:22px;
-    overflow:hidden;
-    background:rgba(255,255,255,.15);
-    backdrop-filter:blur(14px);
-    box-shadow:0 20px 40px rgba(0,0,0,.35);
-    transition:.4s;
-    cursor:pointer;
-}
-
-.gallery-item:hover{
-    transform:translateY(-10px) scale(1.03);
-}
-
-/* IMAGE */
-.gallery-item img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:.4s;
-}
-
-.gallery-item:hover img{
-    transform:scale(1.12);
-}
-
-/* ===== OVERLAY ===== */
-.overlay{
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to top,rgba(0,0,0,.85),transparent 60%);
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    padding:20px;
-    opacity:0;
-    transition:.4s;
-}
-
-.gallery-item:hover .overlay{
-    opacity:1;
-}
-
-.overlay h3{
-    color:#fff;
-    font-size:18px;
-}
-
-.badge{
-    display:inline-block;
-    margin-top:6px;
-    padding:4px 12px;
-    font-size:12px;
-    border-radius:50px;
-    background:#fff;
-    color:#000;
-    width:max-content;
-}
-
-/* ===== ICON BUTTONS ===== */
-.icon-bar{
-    position:absolute;
-    top:15px;
-    right:15px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-
-.icon-btn{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    border:none;
-    cursor:pointer;
-    background:rgba(255,255,255,.9);
-    font-size:18px;
-    transition:.3s;
-}
-
-.icon-btn:hover{
-    transform:scale(1.15);
-}
-
-/* ===== LIGHTBOX ===== */
-.lightbox{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.95);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:999;
-}
-
-.lightbox.active{
-    display:flex;
-}
-
-.lightbox img{
-    max-width:90%;
-    max-height:85vh;
-    border-radius:20px;
-    box-shadow:0 0 60px rgba(255,255,255,.2);
-    transition: opacity 0.3s ease;
-}
-
-.close{
-    position:absolute;
-    top:25px;
-    right:30px;
-    font-size:35px;
-    color:#fff;
-    cursor:pointer;
-    z-index:1001;
-}
-
-/* ===== NAVIGATION BUTTONS ===== */
-.nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: none;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 28px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-    z-index: 1001;
-    backdrop-filter: blur(10px);
-}
-
-.nav-btn:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: translateY(-50%) scale(1.1);
-}
-
-.prev-btn {
-    left: 30px;
-}
-
-.next-btn {
-    right: 30px;
-}
-
-@media(max-width:768px){
-    h1{font-size:2.2rem}
-    .nav-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-    }
-    .prev-btn {
-        left: 15px;
-    }
-    .next-btn {
-        right: 15px;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Creative Glass Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<div class="container">
-<h1>✨ Image Gallery ✨</h1>
+    <div class="container">
+        <h1>✨ Image Gallery ✨</h1>
 
-<div class="filter-buttons">
-<button class="filter-btn active" data-filter="all">All</button>
-<button class="filter-btn" data-filter="people">People</button>
-<button class="filter-btn" data-filter="nature">Nature</button>
-<button class="filter-btn" data-filter="city">City</button>
-<button class="filter-btn" data-filter="animals">Animals</button>
-<button class="filter-btn" data-filter="food">Food</button>
-<button class="filter-btn" data-filter="art">Art</button>
-</div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="people">People</button>
+            <button class="filter-btn" data-filter="nature">Nature</button>
+            <button class="filter-btn" data-filter="city">City</button>
+            <button class="filter-btn" data-filter="animals">Animals</button>
+            <button class="filter-btn" data-filter="food">Food</button>
+            <button class="filter-btn" data-filter="art">Art</button>
+        </div>
 
-<div class="gallery" id="gallery"></div>
-</div>
+        <div class="gallery" id="gallery"></div>
+    </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-<span class="close" onclick="closeLightbox()">×</span>
-<button class="nav-btn prev-btn" onclick="prevImage()">←</button>
-<button class="nav-btn next-btn" onclick="nextImage()">→</button>
-<img id="lightboxImg">
-</div>
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <span class="close" onclick="closeLightbox()">×</span>
+        <button class="nav-btn prev-btn" onclick="prevImage()">←</button>
+        <button class="nav-btn next-btn" onclick="nextImage()">→</button>
+        <img id="lightboxImg">
+    </div>
 
-<script>
-const images = [
-  { src: 'IMAGES/SHORT.JPG', title: 'Rehan Awais', cat: 'people' },
-  { src: 'IMAGES/6.JPG', title: 'City Lights', cat: 'city' },
-  { src: 'IMAGES/7.JPG', title: 'Puppy', cat: 'animals' },
-  { src: 'IMAGES/8.JPG', title: 'Portrait', cat: 'people' },
-  { src: 'IMAGES/9.JPG', title: 'Forest Path', cat: 'nature' },
-  { src: 'IMAGES/4.JPG', title: 'Urban Street', cat: 'city' },
-  { src: 'IMAGES/11.JPG', title: 'Fox', cat: 'animals' },
-  { src: 'IMAGES/12.JPG', title: 'Man Portrait', cat: 'people' },
-  { src: 'IMAGES/13.JPG', title: 'Waterfall', cat: 'nature' },
-  { src: 'IMAGES/14.JPG', title: 'Watercolor', cat: 'art' },
-  { src: 'IMAGES/15.JPG', title: 'Leopard', cat: 'animals' },
-  { src: 'IMAGES/16.JPG', title: 'Sushi', cat: 'food' },
-  { src: 'IMAGES/17.JPG', title: 'Forest Path 2', cat: 'nature' },
-  { src: 'IMAGES/18.JPG', title: 'Mural', cat: 'art' },
-  { src: 'IMAGES/19.JPG', title: 'Monkey', cat: 'animals' },
-  { src: 'IMAGES/20.JPG', title: 'Smiling Man', cat: 'people' },
-  { src: 'IMAGES/21.JPG', title: 'Gourmet Dish', cat: 'food' },
-  { src: 'IMAGES/22.JPG', title: 'Modern Art', cat: 'art' },
-  { src: 'IMAGES/23.JPG', title: 'Woman Portrait', cat: 'people' },
-  { src: 'IMAGES/24.JPG', title: 'Ice Cream', cat: 'food' },
-  { src: 'IMAGES/25.JPG', title: 'Museum Art', cat: 'art' },
-  { src: 'IMAGES/5.JPG', title: 'Skyscraper', cat: 'city' },
-  { src: 'IMAGES/26.JPG', title: 'Pizza', cat: 'food' },
-  { src: 'IMAGES/1.JPG', title: 'London City', cat: 'city' },
-  { src: 'IMAGES/29.JPG', title: 'Mountain Sunset', cat: 'nature' },
-  { src: 'IMAGES/28.JPG', title: 'Mountain Valley', cat: 'nature' }
-];
+    <script>
+        const images = [
+            { src: 'IMAGES/SHORT.JPG', title: 'Rehan Awais', cat: 'people' },
+            { src: 'IMAGES/6.JPG', title: 'City Lights', cat: 'city' },
+            { src: 'IMAGES/7.JPG', title: 'Puppy', cat: 'animals' },
+            { src: 'IMAGES/8.JPG', title: 'Portrait', cat: 'people' },
+            { src: 'IMAGES/9.JPG', title: 'Forest Path', cat: 'nature' },
+            { src: 'IMAGES/4.JPG', title: 'Urban Street', cat: 'city' },
+            { src: 'IMAGES/11.JPG', title: 'Fox', cat: 'animals' },
+            { src: 'IMAGES/12.JPG', title: 'Man Portrait', cat: 'people' },
+            { src: 'IMAGES/13.JPG', title: 'Waterfall', cat: 'nature' },
+            { src: 'IMAGES/14.JPG', title: 'Watercolor', cat: 'art' },
+            { src: 'IMAGES/15.JPG', title: 'Leopard', cat: 'animals' },
+            { src: 'IMAGES/16.JPG', title: 'Sushi', cat: 'food' },
+            { src: 'IMAGES/17.JPG', title: 'Forest Path 2', cat: 'nature' },
+            { src: 'IMAGES/18.JPG', title: 'Mural', cat: 'art' },
+            { src: 'IMAGES/19.JPG', title: 'Monkey', cat: 'animals' },
+            { src: 'IMAGES/20.JPG', title: 'Smiling Man', cat: 'people' },
+            { src: 'IMAGES/21.JPG', title: 'Gourmet Dish', cat: 'food' },
+            { src: 'IMAGES/22.JPG', title: 'Modern Art', cat: 'art' },
+            { src: 'IMAGES/23.JPG', title: 'Woman Portrait', cat: 'people' },
+            { src: 'IMAGES/24.JPG', title: 'Ice Cream', cat: 'food' },
+            { src: 'IMAGES/25.JPG', title: 'Museum Art', cat: 'art' },
+            { src: 'IMAGES/5.JPG', title: 'Skyscraper', cat: 'city' },
+            { src: 'IMAGES/26.JPG', title: 'Pizza', cat: 'food' },
+            { src: 'IMAGES/1.JPG', title: 'London City', cat: 'city' },
+            { src: 'IMAGES/29.JPG', title: 'Mountain Sunset', cat: 'nature' },
+            { src: 'IMAGES/28.JPG', title: 'Mountain Valley', cat: 'nature' }
+        ];
 
-const gallery = document.getElementById('gallery');
-let currentFilter = 'all';
-let currentIndex = 0;
-let filteredImages = [];
+        const gallery = document.getElementById('gallery');
+        let currentFilter = 'all';
+        let currentIndex = 0;
+        let filteredImages = [];
 
-function loadGallery(filter = 'all') {
-    gallery.innerHTML = '';
-    currentFilter = filter;
-    
-    // Filter images based on selected category
-    filteredImages = filter === 'all' 
-        ? images 
-        : images.filter(img => img.cat === filter);
-    
-    filteredImages.forEach((img, index) => {
-        gallery.innerHTML += `
-        <div class="gallery-item" onclick="openLightbox('${img.src}', ${index})">
-            <img src="${img.src}">
-            <div class="icon-bar">
-                <button class="icon-btn" onclick="event.stopPropagation();download('${img.src}')">⬇</button>
-                <button class="icon-btn" onclick="event.stopPropagation();this.innerText='❤️'">❤</button>
-            </div>
-            <div class="overlay">
-                <h3>${img.title}</h3>
-                <span class="badge">${img.cat}</span>
-            </div>
-        </div>`;
-    });
-}
+        function loadGallery(filter = 'all') {
+            gallery.innerHTML = '';
+            currentFilter = filter;
+            
+            // Filter images based on selected category
+            filteredImages = filter === 'all' 
+                ? images 
+                : images.filter(img => img.cat === filter);
+            
+            filteredImages.forEach((img, index) => {
+                gallery.innerHTML += `
+                <div class="gallery-item" onclick="openLightbox('${img.src}', ${index})">
+                    <img src="${img.src}">
+                    <div class="icon-bar">
+                        <button class="icon-btn" onclick="event.stopPropagation();download('${img.src}')">⬇</button>
+                        <button class="icon-btn" onclick="event.stopPropagation();this.innerText='❤️'">❤</button>
+                    </div>
+                    <div class="overlay">
+                        <h3>${img.title}</h3>
+                        <span class="badge">${img.cat}</span>
+                    </div>
+                </div>`;
+            });
+        }
 
-loadGallery();
+        loadGallery();
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.onclick = () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        loadGallery(btn.dataset.filter);
-    };
-});
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadGallery(btn.dataset.filter);
+            };
+        });
 
-function openLightbox(src, index) {
-    currentIndex = index;
-    document.getElementById('lightboxImg').src = src;
-    document.getElementById('lightbox').classList.add('active');
-    
-    // Add keyboard event listener
-    document.addEventListener('keydown', handleKeyDown);
-}
+        function openLightbox(src, index) {
+            currentIndex = index;
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            
+            // Add keyboard event listener
+            document.addEventListener('keydown', handleKeyDown);
+        }
 
-function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.removeEventListener('keydown', handleKeyDown);
-}
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.removeEventListener('keydown', handleKeyDown);
+        }
 
-function nextImage() {
-    if (filteredImages.length === 0) return;
-    
-    currentIndex = (currentIndex + 1) % filteredImages.length;
-    const imgElement = document.getElementById('lightboxImg');
-    imgElement.style.opacity = 0;
-    
-    setTimeout(() => {
-        imgElement.src = filteredImages[currentIndex].src;
-        imgElement.style.opacity = 1;
-    }, 150);
-}
+        function nextImage() {
+            if (filteredImages.length === 0) return;
+            
+            currentIndex = (currentIndex + 1) % filteredImages.length;
+            const imgElement = document.getElementById('lightboxImg');
+            imgElement.style.opacity = 0;
+            
+            setTimeout(() => {
+                imgElement.src = filteredImages[currentIndex].src;
+                imgElement.style.opacity = 1;
+            }, 150);
+        }
 
-function prevImage() {
-    if (filteredImages.length === 0) return;
-    
-    currentIndex = (currentIndex - 1 + filteredImages.length) % filteredImages.length;
-    const imgElement = document.getElementById('lightboxImg');
-    imgElement.style.opacity = 0;
-    
-    setTimeout(() => {
-        imgElement.src = filteredImages[currentIndex].src;
-        imgElement.style.opacity = 1;
-    }, 150);
-}
+        function prevImage() {
+            if (filteredImages.length === 0) return;
+            
+            currentIndex = (currentIndex - 1 + filteredImages.length) % filteredImages.length;
+            const imgElement = document.getElementById('lightboxImg');
+            imgElement.style.opacity = 0;
+            
+            setTimeout(() => {
+                imgElement.src = filteredImages[currentIndex].src;
+                imgElement.style.opacity = 1;
+            }, 150);
+        }
 
-function handleKeyDown(e) {
-    if (e.key === 'ArrowRight') {
-        nextImage();
-    } else if (e.key === 'ArrowLeft') {
-        prevImage();
-    } else if (e.key === 'Escape') {
-        closeLightbox();
-    }
-}
+        function handleKeyDown(e) {
+            if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
+            } else if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        }
 
-function download(src) {
-    const a = document.createElement('a');
-    a.href = src;
-    a.download = '';
-    a.click();
-}
+        function download(src) {
+            const a = document.createElement('a');
+            a.href = src;
+            a.download = '';
+            a.click();
+        }
 
-// Close lightbox when clicking outside the image
-document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this || e.target.classList.contains('close')) {
-        closeLightbox();
-    }
-});
-</script>
+        // Close lightbox when clicking outside the image
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this || e.target.classList.contains('close')) {
+                closeLightbox();
+            }
+        });
+    </script>
 </body>
 </html>
